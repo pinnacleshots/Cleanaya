@@ -1,0 +1,18 @@
+export const services = [
+  { slug: '', label: 'All Services' },
+  { slug: 'house-cleaning', label: 'House Cleaning' },
+  { slug: 'maid-service', label: 'Maid Service' },
+  { slug: 'housekeeping', label: 'Housekeeping' },
+  { slug: 'one-time-cleaning', label: 'One-Time Cleaning' },
+  { slug: 'deep-cleaning', label: 'Deep Cleaning' },
+  { slug: 'regular-cleaning', label: 'Regular Cleaning' },
+  { slug: 'apartment-condo-cleaning', label: 'Apartment And Condo Cleaning' },
+  { slug: 'move-in-out-cleaning', label: 'Move In Out Cleaning' },
+  { slug: 'organization-services', label: 'Organization Services' },
+  { slug: 'green-eco-friendly-cleaning', label: 'Green Eco Friendly Cleaning' },
+  { slug: 'airbnb-turnaround-cleaning', label: 'Airbnb Turnaround Cleaning' },
+  { slug: 'vacation-rental', label: 'Vacation Rental' },
+  { slug: 'post-renovation-cleaning', label: 'Post Renovation Cleaning' },
+  { slug: 'commercial-office-cleaning', label: 'Commercial Office Cleaning' },
+  { slug: 'special-event-cleaning', label: 'Special Event Cleaning' },
+]
