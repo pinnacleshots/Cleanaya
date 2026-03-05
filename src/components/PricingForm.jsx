@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import emailjs from '@emailjs/browser'
+import { EMAILJS } from '../config'
 
 export default function PricingForm({ compact = false }) {
   const [name, setName] = useState('')
@@ -7,17 +9,43 @@ export default function PricingForm({ compact = false }) {
   const [bedrooms, setBedrooms] = useState(1)
   const [bathrooms, setBathrooms] = useState(1)
   const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // TODO: Connect to BookingKoala - replace with your BookingKoala API/widget.
-    // Send: { name, email, mobile, bedrooms, bathrooms }
-    setSubmitted(true)
-    setName('')
-    setEmail('')
-    setMobile('')
-    setBedrooms(1)
-    setBathrooms(1)
+    if (!EMAILJS.publicKey || !EMAILJS.serviceId || !EMAILJS.pricingTemplateId) {
+      setError('Form is not configured. Please add EmailJS env variables.')
+      return
+    }
+    setLoading(true)
+    setError(null)
+    const templateParams = {
+      from_name: name,
+      from_email: email,
+      mobile,
+      bedrooms: String(bedrooms),
+      bathrooms: String(bathrooms),
+      to_email: 'support@cleanaya.com',
+    }
+    try {
+      await emailjs.send(
+        EMAILJS.serviceId,
+        EMAILJS.pricingTemplateId,
+        templateParams,
+        EMAILJS.publicKey
+      )
+      setSubmitted(true)
+      setName('')
+      setEmail('')
+      setMobile('')
+      setBedrooms(1)
+      setBathrooms(1)
+    } catch {
+      setError('Something went wrong. Please try again or call (952) 206-6429.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -110,12 +138,16 @@ export default function PricingForm({ compact = false }) {
         </div>
         <button
           type="submit"
-          className="w-full bg-[#22bed9] text-white py-4 rounded-xl font-bold text-lg uppercase tracking-wide hover:bg-[#1a9bb5] transition-colors glow-aqua mt-2"
+          disabled={loading}
+          className="w-full bg-[#22bed9] text-white py-4 rounded-xl font-bold text-lg uppercase tracking-wide hover:bg-[#1a9bb5] transition-colors glow-aqua mt-2 disabled:opacity-70"
         >
-          Get Price
+          {loading ? 'Sending...' : 'Get Price'}
         </button>
       </div>
 
+      {error && (
+        <p className="mt-4 text-red-600 font-medium text-center text-sm">{error}</p>
+      )}
       {submitted && (
         <p className="mt-4 text-[#22bed9] font-medium text-center text-sm">
           Thanks! We&apos;ll send your quote shortly. Or call us at <a href="tel:9522066429" className="underline">(952) 206-6429</a>.

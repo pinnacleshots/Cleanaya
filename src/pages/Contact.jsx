@@ -1,14 +1,45 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import emailjs from '@emailjs/browser'
+import { EMAILJS } from '../config'
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
   const formRef = useRef(null)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setSubmitted(true)
-    formRef.current?.reset()
+    if (!EMAILJS.publicKey || !EMAILJS.serviceId || !EMAILJS.contactTemplateId) {
+      setError('Form is not configured. Please add EmailJS env variables.')
+      return
+    }
+    setLoading(true)
+    setError(null)
+    const form = formRef.current
+    const formData = new FormData(form)
+    const templateParams = {
+      from_name: formData.get('name'),
+      from_email: formData.get('email'),
+      from_phone: formData.get('phone'),
+      message: formData.get('message'),
+      to_email: 'support@cleanaya.com',
+    }
+    try {
+      await emailjs.send(
+        EMAILJS.serviceId,
+        EMAILJS.contactTemplateId,
+        templateParams,
+        EMAILJS.publicKey
+      )
+      setSubmitted(true)
+      form?.reset()
+    } catch {
+      setError('Something went wrong. Please try again or call (952) 206-6429.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -54,6 +85,19 @@ export default function Contact() {
                 />
               </div>
               <div>
+                <label htmlFor="phone" className="block font-medium text-[#0a0a0a] mb-2">
+                  Phone
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  required
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#22bed9] focus:ring-2 focus:ring-[#22bed9]/20 outline-none transition-all"
+                  placeholder="(952) 206-6429"
+                />
+              </div>
+              <div>
                 <label htmlFor="message" className="block font-medium text-[#0a0a0a] mb-2">
                   Message
                 </label>
@@ -68,10 +112,14 @@ export default function Contact() {
               </div>
               <button
                 type="submit"
-                className="w-full bg-[#22bed9] text-white px-6 py-4 rounded-xl font-semibold hover:bg-[#1a9bb5] transition-colors glow-aqua"
+                disabled={loading}
+                className="w-full bg-[#22bed9] text-white px-6 py-4 rounded-xl font-semibold hover:bg-[#1a9bb5] transition-colors glow-aqua disabled:opacity-70"
               >
-                Send Message
+                {loading ? 'Sending...' : 'Send Message'}
               </button>
+              {error && (
+                <p className="text-red-600 font-medium text-center text-sm">{error}</p>
+              )}
               {submitted && (
                 <p className="text-[#22bed9] font-medium text-center">
                   Thanks! We’ll be in touch soon.

@@ -18,6 +18,26 @@ npm run dev
 
 Visit [http://localhost:5173](http://localhost:5173) to view the site.
 
+## Form Submissions → Email (EmailJS)
+
+Form submissions (Contact + Pricing/Quote) are sent to **support@cleanaya.com** via [EmailJS](https://www.emailjs.com/) (200 emails/month free).
+
+**Setup:**
+1. Sign up at [emailjs.com](https://www.emailjs.com/)
+2. Add an **Email Service** (e.g. Gmail) and connect your support@cleanaya.com account
+3. Create **two email templates**:
+   - **Contact template** – use variables: `{{from_name}}`, `{{from_email}}`, `{{from_phone}}`, `{{message}}`
+   - **Pricing template** – use variables: `{{from_name}}`, `{{from_email}}`, `{{mobile}}`, `{{bedrooms}}`, `{{bathrooms}}`
+4. Copy your **Public Key**, **Service ID**, and both **Template IDs** from the dashboard
+5. Create a `.env` file:
+   ```
+   VITE_EMAILJS_PUBLIC_KEY=your_public_key
+   VITE_EMAILJS_SERVICE_ID=your_service_id
+   VITE_EMAILJS_CONTACT_TEMPLATE_ID=your_contact_template_id
+   VITE_EMAILJS_PRICING_TEMPLATE_ID=your_pricing_template_id
+   ```
+6. Add the same variables in **Vercel** → Project → Settings → Environment Variables
+
 ## Project Structure
 
 - `src/pages/` – Route pages (Home, Services, About, Contact, Booking)
