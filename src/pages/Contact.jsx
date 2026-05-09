@@ -19,11 +19,31 @@ export default function Contact() {
     setError(null)
     const form = formRef.current
     const formData = new FormData(form)
+    const sqft = formData.get('sqft')?.toString().trim() || ''
+    const bedrooms = formData.get('bedrooms')?.toString().trim() || ''
+    const bathrooms = formData.get('bathrooms')?.toString().trim() || ''
+    const city = formData.get('city')?.toString().trim() || ''
+    const serviceType = formData.get('service_type')?.toString().trim() || ''
+    const userMessage = formData.get('message')?.toString().trim() || ''
+
+    const detailsBlock = [
+      '--- Quote / property details ---',
+      serviceType ? `Service type: ${serviceType}` : null,
+      sqft ? `Approx. sq ft: ${sqft}` : null,
+      bedrooms ? `Bedrooms: ${bedrooms}` : null,
+      bathrooms ? `Bathrooms: ${bathrooms}` : null,
+      city ? `City: ${city}` : null,
+      '--- Message ---',
+      userMessage || '(No additional message)',
+    ]
+      .filter(Boolean)
+      .join('\n')
+
     const templateParams = {
       from_name: formData.get('name'),
       from_email: formData.get('email'),
       from_phone: formData.get('phone'),
-      message: formData.get('message'),
+      message: detailsBlock,
       to_email: 'support@cleanaya.com',
     }
     try {

@@ -1,29 +1,31 @@
 @import "tailwindcss";
+@import "./styles/cleanaya-design.css";
 
-/* Cleanaya Brand Theme */
+/* Cleanaya Brand Theme (Tailwind + legacy) */
 @theme {
   --color-slate: #4a5763;
-  --color-aqua: #22bed9;
-  --color-aqua-light: #29c2e0;
-  --color-aqua-dark: #1a9bb5;
-  --color-dark: #0a0a0a;
-  --color-muted: #6b7280;
+  --color-aqua: #3ab5d9;
+  --color-aqua-light: #5dcbec;
+  --color-aqua-dark: #1e2d5a;
+  --color-dark: #151f3f;
+  --color-muted: #6b7a99;
   --font-display: "Outfit", system-ui, sans-serif;
-  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-body: "Outfit", system-ui, sans-serif;
 }
 
-/* Custom base styles */
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  font-family: var(--font-body);
-  background-color: #fafbfc;
+  font-family: Outfit, system-ui, sans-serif;
+  background-color: var(--cy-white, #ffffff);
+  color: var(--cy-text, #1e2d5a);
+  overflow-x: hidden;
 }
 
 .font-display {
-  font-family: var(--font-display);
+  font-family: "DM Serif Display", Georgia, serif;
 }
 
 /* Subtle bubble pattern background */

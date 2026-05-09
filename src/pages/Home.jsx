@@ -1,18 +1,18 @@
-import { Link } from 'react-router-dom'
-import Hero from '../components/Hero'
-import ServicesPreview from '../components/ServicesPreview'
-import WhyChooseUs from '../components/WhyChooseUs'
-import Testimonials from '../components/Testimonials'
-import CTA from '../components/CTA'
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import LandingHome from '../components/landing/LandingHome'
 
 export default function Home() {
-  return (
-    <div>
-      <Hero />
-      <ServicesPreview />
-      <WhyChooseUs />
-      <Testimonials />
-      <CTA />
-    </div>
-  )
+  const location = useLocation()
+
+  useEffect(() => {
+    const hash = location.hash?.replace('#', '')
+    if (!hash) return
+    const t = window.setTimeout(() => {
+      document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' })
+    }, 100)
+    return () => window.clearTimeout(t)
+  }, [location.pathname, location.hash])
+
+  return <LandingHome />
 }
